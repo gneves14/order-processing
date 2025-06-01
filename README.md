@@ -48,6 +48,15 @@ Para executar os testes basta rodar o seguinte comamdo:
     mvn test
 ```
 
+## 📌 Como buildar o projeto
+
+Para buildar o projeto, é utilizado o Maven, utilizando o comando abaixo:
+
+```properties
+    mvn clean install
+```
+
+
 ## 📄 Documentação
 
 > Este projeto tem como objetivo receber um arquivo via API, onde cada linha é parte de um pedido, processá-lo, e persistir, separando usuário, pedidos e produtos. 
