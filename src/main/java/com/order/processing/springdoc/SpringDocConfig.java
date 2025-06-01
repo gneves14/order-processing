@@ -13,7 +13,7 @@ public class SpringDocConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("Order Processing")
-                        .version("v1")
+                        .version("1.0.0")
                         .description("Orders Processing System"));
     }
 }
