@@ -6,64 +6,105 @@ Sistema desenvolvido em Java com Spring Boot para processar pedidos e buscá-los
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
 ![Apache Maven](https://img.shields.io/badge/Apache%20Maven-C71A36?style=for-the-badge&logo=Apache%20Maven&logoColor=white)
 ![REST API](https://img.shields.io/badge/REST%20API-4CAF50?style=for-the-badge&logo=cloudflare&logoColor=white)
-![H2 Database](https://img.shields.io/badge/H2%20Database-004d99?style=for-the-badge&logo=h2&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-00758F?style=for-the-badge&logo=mysql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![H2 Database](https://img.shields.io/badge/h2_database-09476b?style=for-the-badge&logo=h2database&logoColor=white)
 
-## 📑 Índice
+## 📁 Índice
 
 1. [Ambiente de Desenvolvimento](#-ambiente-de-desenvolvimento)
 2. [Tecnologias Utilizadas](#-tecnologias-utilizadas)
 3. [Como Rodar o Projeto](#-como-rodar-o-projeto)
 4. [Como Executar os Testes](#-como-executar-os-testes)
+5. [Containerização com Docker](#-containerizacao-com-docker)
+6. [Documentação](#-documentacao)
+7. [Observações](#-observacoes)
 
+<a name="-ambiente-de-desenvolvimento"></a>
 ## 🚀 Ambiente de desenvolvimento
 
 O repositório do código fonte se encontra privado no GitHub:
 
->https://github.com/gneves14/order-processing
+> https://github.com/gneves14/order-processing
 
+<a name="-tecnologias-utilizadas"></a>
 ## 💻 Tecnologias Utilizadas:
 
->Java 21 → Linguagem de programação
+> Java 21 → Linguagem de programação 
 
->Spring → Framework
+> Spring → Framework
+ 
+> Maven → Ferramenta de build  
 
->Maven → Ferramenta de build
+> MySQL → Banco de dados  
 
->H2 Database → Banco de dados (memória)
+> H2 Database → Banco de dados em memória (testes)  
 
+> Docker → Containerização de serviços
+
+<a name="-como-rodar-o-projeto"></a>
 ## 🛠️ Como rodar o projeto
 
-Para rodar o projeto basta executar o seguinte comando:
+Para rodar o projeto com Docker:
 
-```properties
-    mvn spring-boot:run
+```bash
+docker-compose up --build
 ```
 
+<a name="-como-executar-os-testes"></a>
 ## ⚙️ Como executar os testes
 
-Os testes são criados usando as bibliotecas JUnit e Mockito propriamente do Spring.
-Para executar os testes basta rodar o seguinte comamdo:
+Os testes são criados usando as bibliotecas JUnit e Mockito.  
+Para executar os testes unitários (usando H2 como banco de testes):
 
-```properties
-    mvn test
+```bash
+mvn test
 ```
 
-## 📌 Como buildar o projeto
+<a name="-containerizacao-com-docker"></a>
+## 🐳 Containerização com Docker
 
-Para buildar o projeto, é utilizado o Maven, utilizando o comando abaixo:
+A aplicação é containerizada com Docker. Dois contêineres são utilizados:
 
-```properties
-    mvn clean install
+- mysql_container: Banco de dados MySQL 8.0
+- order-processing-app: Aplicação Spring Boot buildada com Maven
+
+O Dockerfile utiliza duas fases:
+
+1. **build**: compila o projeto usando Maven
+2. **run**: roda o .jar gerado
+
+Para subir os serviços:
+
+```bash
+docker-compose up --build
 ```
 
+Para parar os serviços:
 
+```bash
+docker-compose down
+```
+
+<a name="-documentacao"></a>
 ## 📄 Documentação
 
-> Este projeto tem como objetivo receber um arquivo via API, onde cada linha é parte de um pedido, processá-lo, e persistir, separando usuário, pedidos e produtos. 
+> Este projeto tem como objetivo:
+
+> - Receber um arquivo via API, onde cada linha representa parte de um pedido
+> - Processar e persistir os dados, separando usuário, pedidos e produtos
+> - Disponibilizar consulta dos dados via API utilizando filtros opcionais:
+>    - orderId (ID do pedido)
+>    - startDate (data de início)
+>    - endDate (data de fim)
+
+> A documentação das APIs está disponível via Swagger:
+
+>/processor/swagger-ui/index.html
+
+<a name="-observacoes"></a>
+## 📄 Observações
+> - Um mesmo pedido pode conter produtos com o mesmo productId, pois é permitido haver diferentes meios de pagamento, entre outras variações.
+>
 > 
-> Após o arquivo ser processado, é possível consultar os dados gerados a partir da extração e leitura do mesmo, onde o retorno é feito utilizando DTOs para não expor as entidades.
-> A consulta pode ser feita via API, onde possui os filtros não obrigatórios de id do  pedido (orderId), data início (startDate) e data fim (endDate).
-> 
-> A documentação e testes de APIs, se encontra no Swagger: /processor/swagger-ui/index.html
-> 
-> Obs.: É possível que nos pedidos, possua itens com o mesmo productId. Isto se deve devido ao fato de ser permitido haver diferentes meios de pagamento no pedido, etc.
+> - A configuração do projeto garante que a base de dados seja reiniciada e limpa a cada inicialização.
